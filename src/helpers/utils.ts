@@ -1,23 +1,45 @@
 import * as pdf from 'pdf-parse';
 
+const preprocessText = (text: string): string => {
+  // Realiza ajustes en el texto para mantener el formato
+  // Por ejemplo, puedes reemplazar múltiples espacios por un solo espacio
+  return text.replace(/\s+/g, ' ').trim();
+};
+
+const extractAmount = (text: string, keyword: string): number => {
+  const lines = text.split('\n');
+  let foundKeyword = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].includes(keyword)) {
+      foundKeyword = true;
+    }
+
+    if (foundKeyword) {
+      const match = lines[i].match(/\$([\d.,]+)/);
+      if (match) {
+        return Number(match[1].replace(/\./g, '').replace(',', '.'));
+      }
+    }
+  }
+
+  throw new Error(`No se encontró el monto para ${keyword} en el PDF.`);
+};
+
 export const getImpuestoInmobiliario = async (f) => {
   // Leer el contenido del PDF
   const pdfData = await pdf(f.buffer);
 
   // Obtener todo el texto
-  const text = pdfData.text;
+  let text = pdfData.text;
 
-  const regexLine = /\$[\d.,]+\s*[\d.,]+[\s\S]*?\$([\d.,]+)\$([\d.,]+)/;
-  const match = text.match(regexLine);
+  // Preprocesar el texto
+  text = preprocessText(text);
 
-  if (match) {
-    // Reemplaza el separador de miles y convierte la coma a punto
-    return Number(match[1].replace(/\./g, '').replace(',', '.')); // Retorna el monto (e.g., "5.086,19")
-  }
+  console.log(text);
 
-  throw new Error(
-    'No se encontró el monto del Impuesto Inmobiliario en el PDF.',
-  );
+  // Buscar el monto del Impuesto Inmobiliario
+  return extractAmount(text, 'IMPUESTO INMOBILIARIO:');
 };
 
 export const getExpensasExtraordinarias = async (f) => {
@@ -25,15 +47,13 @@ export const getExpensasExtraordinarias = async (f) => {
   const pdfData = await pdf(f.buffer);
 
   // Obtener todo el texto
-  const text = pdfData.text;
-  const regexLine = /exp\. extraord\.\s*\$\s*([\d.,]+)/i;
-  const match = text.match(regexLine);
+  let text = pdfData.text;
 
-  if (match) {
-    return Number(match[1].replace(/\./g, '').replace(',', '.')); // Retorna el monto (e.g., "19.080,00")
-  }
+  // Preprocesar el texto
+  text = preprocessText(text);
 
-  throw new Error(
-    'No se encontró el monto de las Expensas Extraordinarias en el PDF.',
-  );
+  console.log(text);
+
+  // Buscar el monto de Expensas Extraordinarias
+  return extractAmount(text, 'Exp. Extraord.');
 };
