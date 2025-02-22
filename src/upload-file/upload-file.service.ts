@@ -1,23 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import {
-  getExpensasExtraordinarias,
-  getImpuestoInmobiliario,
+  extractExpExtraord,
+  extractImpuestoInmobiliario,
+  extraerTextoOrdenado,
 } from '../helpers/utils';
 
 @Injectable()
 export class UploadFileService {
   async precessFile(files: Express.Multer.File[]) {
-    const res = {
-      inmobiliario: 0,
-      extraordinarias: 0,
-      alquiler: 317000,
-    };
+    const res = { inmobiliario: 0, extraordinarias: 0, alquiler: 317000 };
 
     for (const [i, f] of files.entries()) {
+      const texto = await extraerTextoOrdenado(f);
       if (i === 0) {
-        res.inmobiliario = await getImpuestoInmobiliario(f);
+        res.inmobiliario = extractImpuestoInmobiliario(texto);
       } else {
-        res.extraordinarias = await getExpensasExtraordinarias(f);
+        res.extraordinarias = extractExpExtraord(texto);
       }
     }
 
