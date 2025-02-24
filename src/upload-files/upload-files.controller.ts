@@ -8,10 +8,10 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
-import { UploadFileService } from './upload-file.service';
+import { UploadFileService } from './upload-files.service';
 
-@Controller('upload-file')
-export class UploadFileController {
+@Controller('upload-files')
+export class UploadFilesController {
   constructor(private uploadFileSvc: UploadFileService) {}
 
   @Post()
@@ -28,6 +28,7 @@ export class UploadFileController {
 
     return res.status(HttpStatus.OK).json({
       response,
+      status: HttpStatus.OK,
     });
   }
 }
