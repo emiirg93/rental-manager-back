@@ -38,7 +38,7 @@ export class EmailController {
           extraordinarias: 0,
           totalExpensas: 0,
         },
-        alquiler: 317000,
+        alquiler: 300000,
       };
 
       await this.emailService.sendMail(
