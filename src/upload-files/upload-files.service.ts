@@ -34,7 +34,7 @@ export class UploadFileService {
       }
     }
 
-    res.alquiler -= res.abl.impuestoInmobiliario - res.expensas.extraordinarias;
+    res.alquiler -= res.abl.impuestoInmobiliario + res.expensas.extraordinarias;
 
     return res;
   }
