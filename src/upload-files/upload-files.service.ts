@@ -20,7 +20,7 @@ export class UploadFileService {
         extraordinarias: 0,
         totalExpensas: 0,
       },
-      alquiler: 300000,
+      alquiler: 317000,
     };
 
     for (const [i, f] of files.entries()) {

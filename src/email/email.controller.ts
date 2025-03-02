@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
-import { DetalleAlquiler } from '../interfaces/detalle-alquiler.interface';
+import { EmailDataDto } from '../dtos/email-data.dto';
 import { EmailService } from './email.service';
 
 @Controller('email')
@@ -19,7 +19,7 @@ export class EmailController {
   @Post('send')
   @UseInterceptors(FilesInterceptor('files', 10))
   async sendEmail(
-    @Body() emailData: { to: string; subject: string; text: string },
+    @Body() emailData: EmailDataDto,
     @UploadedFiles() files: Express.Multer.File[],
     @Res() res: Response,
   ) {
@@ -29,24 +29,12 @@ export class EmailController {
         content: file.buffer,
       }));
 
-      const detalleAlquiler: DetalleAlquiler = {
-        abl: {
-          impuestoInmobiliario: 0,
-          totalAbl: 0,
-        },
-        expensas: {
-          extraordinarias: 0,
-          totalExpensas: 0,
-        },
-        alquiler: 300000,
-      };
-
       await this.emailService.sendMail(
         emailData.to,
         emailData.subject,
         emailData.text,
         formattedAttachments,
-        detalleAlquiler,
+        emailData.detalleAlquiler,
       );
       return res
         .status(HttpStatus.OK)
