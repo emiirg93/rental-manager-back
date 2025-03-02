@@ -9,6 +9,6 @@ async function bootstrap() {
     credentials: true, // Si envías cookies o headers de autenticación
   });
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT);
 }
 bootstrap();

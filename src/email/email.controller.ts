@@ -10,6 +10,7 @@ import {
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { EmailDataDto } from '../dtos/email-data.dto';
+import { DetalleAlquiler } from '../interfaces/detalle-alquiler.interface';
 import { EmailService } from './email.service';
 
 @Controller('email')
@@ -34,7 +35,7 @@ export class EmailController {
         emailData.subject,
         emailData.text,
         formattedAttachments,
-        emailData.detalleAlquiler,
+        JSON.parse(emailData.detalleAlquiler) as DetalleAlquiler,
       );
       return res
         .status(HttpStatus.OK)
