@@ -22,7 +22,7 @@ export class UploadFileService {
       },
       alquiler: 317000,
     };
-    console.log('files', files.length);
+
     for (const [i, f] of files.entries()) {
       const texto = await extraerTextoOrdenado(f);
       if (i === 0) {
