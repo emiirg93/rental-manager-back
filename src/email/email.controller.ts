@@ -30,12 +30,14 @@ export class EmailController {
         content: file.buffer,
       }));
 
+      const detalle = JSON.parse(emailData.detalleAlquiler) as DetalleAlquiler;
+
       await this.emailService.sendMail(
         emailData.to,
         emailData.subject,
         emailData.text,
         formattedAttachments,
-        JSON.parse(emailData.detalleAlquiler) as DetalleAlquiler,
+        { ...detalle, comentario: emailData.text },
       );
       return res
         .status(HttpStatus.OK)

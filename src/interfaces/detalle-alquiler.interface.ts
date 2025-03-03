@@ -8,4 +8,5 @@ export interface DetalleAlquiler {
     totalExpensas: number;
   };
   alquiler: number;
+  comentario?: string;
 }
