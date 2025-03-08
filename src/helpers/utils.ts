@@ -111,6 +111,20 @@ const parseFormattedNumber = (value: string): number => {
   return parseFloat(normalized);
 };
 
+const formatToARS = (value: number | string): string => {
+  const numberValue = typeof value === 'string' ? parseFloat(value) : value;
+
+  if (isNaN(numberValue)) {
+    throw new Error('El valor proporcionado no es un número válido.');
+  }
+
+  return numberValue.toLocaleString('es-AR', {
+    style: 'currency',
+    currency: 'ARS',
+    minimumFractionDigits: 2,
+  });
+};
+
 export const tamplateHTML = (detalleAlquiler: DetalleAlquiler) => {
   return `
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -141,7 +155,7 @@ export const tamplateHTML = (detalleAlquiler: DetalleAlquiler) => {
                                 </tr>
                                 <tr>
                                     <td align="right" style="font-size: 24px; font-weight: 600; color: #4355b9;">
-                                        $317,000.00
+                                        ${formatToARS(317000)}
                                     </td>
                                 </tr>
                             </table>
@@ -164,14 +178,14 @@ export const tamplateHTML = (detalleAlquiler: DetalleAlquiler) => {
                                         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 10px;">
                                             <tr>
                                                 <td style="font-size: 14px; color: #666666;">Impuesto Inmobiliario</td>
-                                                <td align="right" style="font-size: 14px; font-weight: 500; color: #333333;">$${detalleAlquiler.abl.impuestoInmobiliario}</td>
+                                                <td align="right" style="font-size: 14px; font-weight: 500; color: #333333;">$${formatToARS(detalleAlquiler.abl.impuestoInmobiliario)}</td>
                                             </tr>
                                         </table>
                                         <hr style="border: none; height: 1px; background-color: #e5e7eb; margin: 10px 0;" />
                                         <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                             <tr>
                                                 <td style="font-size: 14px; font-weight: 500; color: #333333;">Total</td>
-                                                <td align="right" style="font-size: 16px; font-weight: 600; color: #4355b9;">$${detalleAlquiler.abl.totalAbl}</td>
+                                                <td align="right" style="font-size: 16px; font-weight: 600; color: #4355b9;">$${formatToARS(detalleAlquiler.abl.totalAbl)}</td>
                                             </tr>
                                         </table>
                                     </td>
@@ -196,14 +210,14 @@ export const tamplateHTML = (detalleAlquiler: DetalleAlquiler) => {
                                         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 10px;">
                                             <tr>
                                                 <td style="font-size: 14px; color: #666666;">Extraordinarias</td>
-                                                <td align="right" style="font-size: 14px; font-weight: 500; color: #333333;">$${detalleAlquiler.expensas.extraordinarias}</td>
+                                                <td align="right" style="font-size: 14px; font-weight: 500; color: #333333;">$${formatToARS(detalleAlquiler.expensas.extraordinarias)}</td>
                                             </tr>
                                         </table>
                                         <hr style="border: none; height: 1px; background-color: #e5e7eb; margin: 10px 0;" />
                                         <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                             <tr>
                                                 <td style="font-size: 14px; font-weight: 500; color: #333333;">Total</td>
-                                                <td align="right" style="font-size: 16px; font-weight: 600; color: #4355b9;">$${detalleAlquiler.expensas.totalExpensas}</td>
+                                                <td align="right" style="font-size: 16px; font-weight: 600; color: #4355b9;">$${formatToARS(detalleAlquiler.expensas.totalExpensas)}</td>
                                             </tr>
                                         </table>
                                     </td>
@@ -247,7 +261,7 @@ export const tamplateHTML = (detalleAlquiler: DetalleAlquiler) => {
                                 </tr>
                                 <tr>
                                     <td align="center" style="font-size: 28px; font-weight: 700; color: #ffffff;">
-                                        $${detalleAlquiler.alquiler}
+                                        $${formatToARS(detalleAlquiler.alquiler)}
                                     </td>
                                 </tr>
                             </table>
